@@ -1,5 +1,5 @@
 {
-  "name": "ngx-http-interceptor",
+  "name": "x-ng4-http-interceptor",
   "version": "0.0.0-development",
   "description": "Adds interception capability around angular http api",
   "keywords": [
