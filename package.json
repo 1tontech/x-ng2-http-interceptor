@@ -21,6 +21,9 @@
     "lib/",
     "README.md"
   ],
+  "directories": {
+    "lib": "lib"
+  },
   "main": "index.js",
   "license": "MIT",
   "scripts": {
