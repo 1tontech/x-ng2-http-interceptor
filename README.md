@@ -1,10 +1,9 @@
 # x-ng4-http-interceptor
 
-[![travis build](https://img.shields.io/travis/1tontech/ngx-http-validators.svg?style=flat-square)](https://travis-ci.org/1tontech/ngx-http-validators)
-[![codecov coverage](https://img.shields.io/codecov/c/github/1tontech/ngx-http-validators.svg?style=flat-square)](https://codecov.io/github/1tontech/ngx-http-validators)
-[![version](https://img.shields.io/npm/v/ngx-http-validators.svg?style=flat-square)](http://npm.im/ngx-http-validators)
-[![downloads](https://img.shields.io/npm/dm/ngx-http-validators.svg?style=flat-square)](http://npm-stat.com/charts.html?package=ngx-http-validators&from=2015-08-01)
-[![MIT License](https://img.shields.io/npm/l/ngx-http-validators.svg?style=flat-square)](http://opensource.org/licenses/MIT)
+[![Travis branch](https://img.shields.io/travis/1tontech/ngx-http-interceptor/angular4.svg)](	https://img.shields.io/travis/1tontech/ngx-http-interceptor/angular4.svg)
+[![version](https://img.shields.io/npm/v/x-ng4-http-interceptor.svg?style=flat-square)](http://npm.im/x-ng4-http-interceptor)
+[![downloads](https://img.shields.io/npm/dm/x-ng4-http-interceptor.svg?style=flat-square)](http://npm-stat.com/charts.html?package=x-ng4-http-interceptor)
+[![MIT License](https://img.shields.io/npm/l/x-ng4-http-interceptor.svg?style=flat-square)](http://opensource.org/licenses/MIT)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square)](https://github.com/semantic-release/semantic-release)
 
 This package adds the intercepting capabilities to `http` module of Latest version of Angular, by extending the @angular/http class. For concept behind Interceptor, take a look at the [wiki](https://github.com/1tontech/x-ng4-http-interceptor/wiki/Concept)
