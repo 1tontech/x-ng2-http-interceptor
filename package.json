@@ -1,5 +1,5 @@
 {
-  "name": "x-ng4-http-interceptor",
+  "name": "x-ng2-http-interceptor",
   "version": "0.0.0-development",
   "description": "Adds interception capability around angular http api",
   "keywords": [
@@ -33,15 +33,15 @@
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "peerDependencies": {
-    "@angular/core": ">=4.0.0-beta.1 <5",
-    "@angular/http": ">=4.0.0-beta.1 <5",
+    "@angular/core": "^2.0.0",
+    "@angular/http": "^2.0.0",
     "rxjs": "^5.0.0"
   },
   "devDependencies": {
-    "@angular/common": ">=4.0.0-beta.1 <5",
-    "@angular/core": ">=4.0.0-beta.1 <5",
-    "@angular/http": ">=4.0.0-beta.1 <5",
-    "@angular/platform-browser": ">=4.0.0-beta.1 <5",
+    "@angular/common": "^2.0.0",
+    "@angular/core": "^2.0.0",
+    "@angular/http": "^2.0.0",
+    "@angular/platform-browser": "^2.0.0",
     "commitizen": "^2.9.5",
     "cz-conventional-changelog": "^1.2.0",
     "eslint": "^3.14.0",
@@ -65,6 +65,6 @@
     "tag": "dev"
   },
   "release": {
-    "branch": "angular4"
+    "branch": "angular2"
   }
 }

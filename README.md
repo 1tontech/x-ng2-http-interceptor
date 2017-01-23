@@ -1,19 +1,19 @@
-# x-ng4-http-interceptor
+# x-ng2-http-interceptor
 
-[![Travis branch](https://img.shields.io/travis/1tontech/ngx-http-interceptor/angular4.svg?style=flat-square)](	https://img.shields.io/travis/1tontech/ngx-http-interceptor/angular4.svg)
-[![version](https://img.shields.io/npm/v/x-ng4-http-interceptor.svg?style=flat-square)](http://npm.im/x-ng4-http-interceptor)
-[![downloads](https://img.shields.io/npm/dm/x-ng4-http-interceptor.svg?style=flat-square)](http://npm-stat.com/charts.html?package=x-ng4-http-interceptor)
-[![MIT License](https://img.shields.io/npm/l/x-ng4-http-interceptor.svg?style=flat-square)](http://opensource.org/licenses/MIT)
+[![Travis branch](https://img.shields.io/travis/1tontech/ngx-http-interceptor/angular2.svg?style=flat-square)](https://img.shields.io/travis/1tontech/ngx-http-interceptor/angular2.svg)
+[![version](https://img.shields.io/npm/v/x-ng2-http-interceptor.svg?style=flat-square)](http://npm.im/x-ng2-http-interceptor)
+[![downloads](https://img.shields.io/npm/dm/x-ng2-http-interceptor.svg?style=flat-square)](http://npm-stat.com/charts.html?package=x-ng2-http-interceptor)
+[![MIT License](https://img.shields.io/npm/l/x-ng2-http-interceptor.svg?style=flat-square)](http://opensource.org/licenses/MIT)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square)](https://github.com/semantic-release/semantic-release)
 
-This package adds the intercepting capabilities to `http` module of Latest version of Angular, by extending the @angular/http class. For concept behind Interceptor, take a look at the [wiki](https://github.com/1tontech/x-ng4-http-interceptor/wiki/Concept)
+This package adds the intercepting capabilities to `http` module of Latest version of Angular, by extending the @angular/http class. For concept behind Interceptor, take a look at the [wiki](https://github.com/1tontech/x-ng2-http-interceptor/wiki/Concept)
 
 # Installation
 
 To install, just run in your angular project:
 
 ```
-npm install x-ng4-http-interceptor --save
+npm install x-ng2-http-interceptor --save
 ```
 
 And it should be importable with webpack out of the box
@@ -25,7 +25,7 @@ Interceptors are registered when the service is created (to avoid any race-condi
 ```ts
 import { XHRBackend, RequestOptions } from '@angular/http';
 
-import { InterceptorService } from 'x-ng4-http-interceptor';
+import { InterceptorService } from 'x-ng2-http-interceptor';
 
 export function interceptorFactory(xhrBackend: XHRBackend, requestOptions: RequestOptions) {
   let service = new InterceptorService(xhrBackend, requestOptions);
@@ -56,7 +56,7 @@ export function interceptorFactory(xhrBackend: XHRBackend, requestOptions: Reque
 Once we have it set up, we can use it in our Controllers as if we were using the default Angular `Http` service:
 ```ts
 import { Component } from '@angular/core';
-import { InterceptorService } from 'x-ng4-http-interceptor';
+import { InterceptorService } from 'x-ng2-http-interceptor';
 
 @Component({
   selector: 'my-component',
@@ -154,7 +154,7 @@ export interface Interceptor {
 One that will get the request that's about to be sent to the server, and another that will get the response that the server just sent. For that, we just need to create a new class that implements Interceptor:
 
 ```ts
-import { Interceptor, InterceptorRequest, InterceptorResponseWrapper } from 'x-ng4-http-interceptor';
+import { Interceptor, InterceptorRequest, InterceptorResponseWrapper } from 'x-ng2-http-interceptor';
 
 export class ServerURLInterceptor implements Interceptor {
     beforeRequest(request: InterceptorRequest): Observable<InterceptorRequest> | InterceptorRequest | void {
@@ -222,7 +222,7 @@ If you are using the `provideInterceptorService` option (without AoT Compiler su
 
 If our `ServerURLInterceptor` were a Service, we would have a module declaration like:
 ```ts
-import { InterceptorService } from 'x-ng4-http-interceptor';
+import { InterceptorService } from 'x-ng2-http-interceptor';
 import { ServerURLInterceptor } from './services/serverURLInterceptor';
 import { XHRBackend, RequestOptions } from '@angular/http';
 
