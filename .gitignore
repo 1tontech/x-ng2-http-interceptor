@@ -1,0 +1,6 @@
+yarn.lock
+*.log
+*.*~
+*.tgz
+dist/
+node_modules/

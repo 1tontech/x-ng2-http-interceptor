@@ -1,0 +1,63 @@
+{
+  "name": "ngx-http-interceptor",
+  "version": "0.0.0-development",
+  "description": "Adds interception capability around angular http api",
+  "keywords": [
+    "Angular",
+    "Http interceptor",
+    "Interceptor"
+  ],
+  "author": {
+    "name": "Ashok Koyi",
+    "url": "http://thekalinga.in"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/1tontech/ngx-http-interceptor"
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "dist",
+    "README.md"
+  ],
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "rimraf dist && tsc -p src",
+    "commit": "git-cz",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+  },
+  "peerDependencies": {
+    "@angular/core": ">=4.0.0-beta.1 <5",
+    "@angular/http": ">=4.0.0-beta.1 <5",
+    "rxjs": "^5.0.0"
+  },
+  "devDependencies": {
+    "@angular/common": ">=4.0.0-beta.1 <5",
+    "@angular/core": ">=4.0.0-beta.1 <5",
+    "@angular/http": ">=4.0.0-beta.1 <5",
+    "@angular/platform-browser": ">=4.0.0-beta.1 <5",
+    "commitizen": "^2.9.5",
+    "cz-conventional-changelog": "^1.2.0",
+    "eslint": "^3.14.0",
+    "ghooks": "^2.0.0",
+    "rimraf": "^2.5.4",
+    "rxjs": "^5.0.0",
+    "semantic-release": "^6.3.2",
+    "typescript": "^2.0.0",
+    "validate-commit-msg": "^2.10.1",
+    "zone.js": "^0.6.26"
+  },
+  "config": {
+    "ghooks": {
+      "commit-msg": "validate-commit-msg"
+    },
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
+  },
+  "publishConfig": {
+    "tag": "dev"
+  }
+}
