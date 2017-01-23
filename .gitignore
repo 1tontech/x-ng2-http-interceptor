@@ -2,5 +2,5 @@ yarn.lock
 *.log
 *.*~
 *.tgz
-dist/
+lib/
 node_modules/

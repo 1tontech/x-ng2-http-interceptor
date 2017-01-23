@@ -18,13 +18,14 @@
   "files": [
     "index.js",
     "index.d.ts",
-    "dist",
+    "lib/",
     "README.md"
   ],
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "rimraf dist && tsc -p src",
+    "prebuild": "npm prune",
+    "build": "rimraf lib/ && rimraf dist/ && tsc -p src",
     "commit": "git-cz",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
