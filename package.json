@@ -35,7 +35,7 @@
   "peerDependencies": {
     "@angular/core": "^2.0.0",
     "@angular/http": "^2.0.0",
-    "rxjs": "^5.0.0"
+    "rxjs": "^5.0.0-beta.0"
   },
   "devDependencies": {
     "@angular/common": "^2.0.0",
@@ -47,7 +47,7 @@
     "eslint": "^3.14.0",
     "ghooks": "^2.0.0",
     "rimraf": "^2.5.4",
-    "rxjs": "^5.0.0",
+    "rxjs": "^5.0.0-beta.0",
     "semantic-release": "^6.3.2",
     "typescript": "^2.0.0",
     "validate-commit-msg": "^2.10.1",
