@@ -316,7 +316,7 @@ export class InterceptorService extends Http {
           return procesedResponseWrapper$
             .catch((err: any, _: Observable<InterceptorResponseWrapper>) => {
               let responseBuilder = InterceptorService._InterceptorResponseWrapperBuilder.new(responseWrapper)
-                .response(undefined)
+                .response(null)
                 .err(err)
                 .errEncounteredAt(index)
                 .errEncounteredInRequestCycle(false);
@@ -332,7 +332,7 @@ export class InterceptorService extends Http {
    * Tests whether the passed in object represents interceptor version/native request options
    */
   private representsInterceptorFlavor(options: RequestOptionsArgs | InterceptorRequestOptionsArgs): options is InterceptorRequestOptionsArgs {
-    return (<InterceptorRequestOptionsArgs>options).sharedData !== undefined;
+   return (<InterceptorRequestOptionsArgs>options).sharedData !== undefined && (<InterceptorRequestOptionsArgs>options).sharedData !== null;
   }
 
   /**

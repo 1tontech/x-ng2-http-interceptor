@@ -120,7 +120,7 @@ export class InterceptorResponseWrapper {
   }
 
   isShortCircuited(): boolean {
-    return this._shortCircuitTriggeredBy !== undefined;
+    return this._shortCircuitTriggeredBy !== undefined && this._shortCircuitTriggeredBy !== null && !!this._shortCircuitTriggeredBy;
   }
 
   circuitShortedByMe(currentStep: number): boolean {

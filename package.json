@@ -21,10 +21,8 @@
     "lib/",
     "README.md"
   ],
-  "directories": {
-    "lib": "lib"
-  },
   "main": "index.js",
+  "types": "index.d.ts",
   "license": "MIT",
   "scripts": {
     "prebuild": "npm prune",
