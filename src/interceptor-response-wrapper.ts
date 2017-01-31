@@ -88,19 +88,19 @@ export class InterceptorResponseWrapper {
   }
 
   get shortCircuitTriggeredBy(): number {
-    return this._shortCircuitTriggeredBy;
+    return +this._shortCircuitTriggeredBy;
   }
 
   get forceReturnResponse(): boolean {
-    return this._forceReturnResponse;
+    return !!this._forceReturnResponse;
   }
 
   get forceRequestCompletion(): boolean {
-    return this._forceRequestCompletion;
+    return !!this._forceRequestCompletion;
   }
 
   get responseGeneratedByShortCircuitHandler(): boolean {
-    return this._responseGeneratedByShortCircuitHandler;
+    return !!this._responseGeneratedByShortCircuitHandler;
   }
 
   get err(): any {
@@ -108,11 +108,11 @@ export class InterceptorResponseWrapper {
   }
 
   get errEncounteredAt(): number {
-    return this._errEncounteredAt;
+    return +this._errEncounteredAt;
   }
 
   get errEncounteredInRequestCycle(): boolean {
-    return this._errEncounteredInRequestCycle;
+    return !!this._errEncounteredInRequestCycle;
   }
 
   get responseGeneratedByErrHandler(): boolean {
@@ -128,7 +128,7 @@ export class InterceptorResponseWrapper {
   }
 
   errThrownByMe(currentStep: number): boolean {
-    return this._errEncounteredAt && this._errEncounteredAt === currentStep;
+    return !!this._errEncounteredAt && this._errEncounteredAt === currentStep;
   }
 
 }

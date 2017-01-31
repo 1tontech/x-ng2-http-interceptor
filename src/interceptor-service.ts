@@ -10,14 +10,16 @@ import {
   RequestOptionsArgs
 } from '@angular/http';
 
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
 
 import { HttpDirect } from './http-direct';
 import { InterceptorRequest } from './interceptor-request';
 import { InterceptorResponseWrapper } from './interceptor-response-wrapper';
 import { Interceptor } from './interceptor';
 import { InterceptorRequestOptionsArgs } from './interceptor-request-options-args';
+import { _InterceptorRequestBuilder } from './_interceptor-request-builder';
 import { InterceptorRequestBuilder } from './interceptor-request-builder';
+import { _InterceptorResponseWrapperBuilder } from './_interceptor-response-wrapper-builder';
 import { InterceptorResponseWrapperBuilder } from './interceptor-response-wrapper-builder';
 import { InterceptorUtils } from './interceptor-utils';
 import { RealResponseObservableTransformer } from './real-response-observable-transformer';
@@ -52,7 +54,7 @@ export class InterceptorService extends Http {
   /** Parent overrides **/
   request(url: string | Request, options?: RequestOptionsArgs | InterceptorRequestOptionsArgs): Observable<Response> {
     let interceptorOptions: InterceptorRequestOptionsArgs;
-    if (options) {
+    if (!options) {
       interceptorOptions = {};
     } else if (this.representsInterceptorFlavor(options)) {
       interceptorOptions = options;
@@ -61,7 +63,7 @@ export class InterceptorService extends Http {
     }
     interceptorOptions.headers = interceptorOptions.headers || new Headers();
 
-    const request = InterceptorService._InterceptorRequestBuilder.new()
+    const request = _InterceptorRequestBuilder.new()
       .url(url)
       .options(interceptorOptions)
       .sharedData(interceptorOptions.sharedData || {})
@@ -160,7 +162,7 @@ export class InterceptorService extends Http {
   private httpRequest(request: InterceptorRequest): Observable<Response> {
     return this.runBeforeInterceptors(request)
       .flatMap<InterceptorRequest, InterceptorResponseWrapper>((request: InterceptorRequest, _: number) => {
-        let interceptorRequestInternal = new InterceptorService._InterceptorRequestBuilder(request);
+        let interceptorRequestInternal = _InterceptorRequestBuilder.new(request);
 
         if (interceptorRequestInternal.err || interceptorRequestInternal.alreadyShortCircuited) {
           return Observable.of(request);
@@ -168,7 +170,7 @@ export class InterceptorService extends Http {
           if (interceptorRequestInternal.alsoForceRequestCompletion) {
             return Observable.empty();
           } else if (!interceptorRequestInternal.alreadyShortCircuited) {
-            let requestBuilder = InterceptorService._InterceptorRequestBuilder.new(request)
+            let requestBuilder = _InterceptorRequestBuilder.new(request)
               .shortCircuitAtCurrentStep(false)
               .shortCircuitTriggeredBy(this.interceptors.length - 1) // since the last interceptor in the chain asked for short circuiting
               .alreadyShortCircuited(true);
@@ -184,11 +186,11 @@ export class InterceptorService extends Http {
         }
 
         return response$.map((response: Response) => {
-          return InterceptorService._InterceptorResponseWrapperBuilder.new(request)
+          return _InterceptorResponseWrapperBuilder.new(request)
             .response(response)
             .build();
         }).catch(err => {
-          let responseBuilder = InterceptorService._InterceptorResponseWrapperBuilder.new(request)
+          let responseBuilder = _InterceptorResponseWrapperBuilder.new(request)
             .err(err)
             .errEncounteredAt(this.interceptors.length)
             .errEncounteredInRequestCycle(true);
@@ -223,7 +225,7 @@ export class InterceptorService extends Http {
 
       request$ = request$
         .flatMap<InterceptorRequest, InterceptorRequest>((request: InterceptorRequest, index: number) => {
-          let requestInternal = new InterceptorService._InterceptorRequestBuilder(request);
+          const requestInternal = _InterceptorRequestBuilder.new(request);
 
           if (requestInternal.err || requestInternal.alreadyShortCircuited) {
             return Observable.of(request);
@@ -231,7 +233,7 @@ export class InterceptorService extends Http {
             if (requestInternal.alsoForceRequestCompletion) {
               return Observable.empty();
             } else if (!requestInternal.alreadyShortCircuited) {
-              let requestBuilder = InterceptorService._InterceptorRequestBuilder.new(request)
+              let requestBuilder = _InterceptorRequestBuilder.new(request)
                 .shortCircuitAtCurrentStep(false)
                 .shortCircuitTriggeredBy(this.interceptors.length - 1) // since the last interceptor in the chain asked for short circuiting
                 .alreadyShortCircuited(true);
@@ -241,7 +243,7 @@ export class InterceptorService extends Http {
             }
           }
 
-          let processedRequest = interceptor.beforeRequest(request);
+          const processedRequest = interceptor.beforeRequest(request, index);
           let processedRequest$: Observable<InterceptorRequest>;
 
           if (!processedRequest) { // if no request is returned; just proceed with the original request
@@ -253,7 +255,7 @@ export class InterceptorService extends Http {
           }
           return processedRequest$
             .catch((err: any, caught: Observable<InterceptorRequest>) => {
-              let responseBuilder = InterceptorService._InterceptorRequestBuilder.new(request)
+              let responseBuilder = _InterceptorRequestBuilder.new(request)
                 .err(err)
                 .errEncounteredAt(i);
               return Observable.of(responseBuilder.build());
@@ -273,7 +275,7 @@ export class InterceptorService extends Http {
     } else if (responseWrapper.isShortCircuited()) {
       startFrom = responseWrapper.shortCircuitTriggeredBy;
     } else {
-      this.interceptors.length - 1;
+      startFrom = this.interceptors.length - 1;
     }
 
     for (let index = startFrom; index >= 0; index--) {
@@ -290,7 +292,7 @@ export class InterceptorService extends Http {
             return Observable.of(responseWrapper);
           }
 
-          let processedResponse;
+          let processedResponse: void | InterceptorResponseWrapper | Observable<InterceptorResponseWrapper>;
 
           const invokeErrHandler = responseWrapper.err && !responseWrapper.response;
           const invokeShortCircuitHandler = responseWrapper.isShortCircuited() && !responseWrapper.response;
@@ -315,8 +317,8 @@ export class InterceptorService extends Http {
 
           return procesedResponseWrapper$
             .catch((err: any, _: Observable<InterceptorResponseWrapper>) => {
-              let responseBuilder = InterceptorService._InterceptorResponseWrapperBuilder.new(responseWrapper)
-                .response(null)
+              let responseBuilder = _InterceptorResponseWrapperBuilder.new(responseWrapper)
+                .response(undefined)
                 .err(err)
                 .errEncounteredAt(index)
                 .errEncounteredInRequestCycle(false);
@@ -332,190 +334,7 @@ export class InterceptorService extends Http {
    * Tests whether the passed in object represents interceptor version/native request options
    */
   private representsInterceptorFlavor(options: RequestOptionsArgs | InterceptorRequestOptionsArgs): options is InterceptorRequestOptionsArgs {
-   return (<InterceptorRequestOptionsArgs>options).sharedData !== undefined && (<InterceptorRequestOptionsArgs>options).sharedData !== null;
-  }
-
-  /**
-   * Class that exposes internal variables of InterceptorRequest for internal use
-   */
-  private static _InterceptorRequest = class extends InterceptorRequest {
-
-    constructor(request: InterceptorRequest) {
-      super(InterceptorRequestBuilder.new(request));
-    }
-
-    shortCircuitAtCurrentStep(shortCircuitAtCurrentStep: boolean): boolean {
-      return this._shortCircuitAtCurrentStep;
-    }
-
-    alsoForceRequestCompletion(alsoForceRequestCompletion: boolean): boolean {
-      return this._alsoForceRequestCompletion;
-    }
-
-    alreadyShortCircuited(alreadyShortCircuited: boolean): boolean {
-      return this._alreadyShortCircuited;
-    }
-
-    shortCircuitTriggeredBy(shortCircuitTriggeredBy: number): number {
-      return this._shortCircuitTriggeredBy;
-    }
-
-    err(err: any): any {
-      return this._err;
-    }
-
-    errEncounteredAt(errEncounteredAt: number): number {
-      return this._errEncounteredAt;
-    }
-
-  }
-
-  /**
-   * Utility builder for creating a new instance of _InterceptorRequest with additional ability to set internal properties aswell
-   * Use _InterceptorRequestBuilder.new() to instantiate the builder
-   */
-  private static _InterceptorRequestBuilder = class extends InterceptorRequestBuilder {
-
-    /**
-     * Use _InterceptorRequestBuilder.new() to instantiate the builder
-     */
-    protected constructor() {
-      super();
-    }
-
-    static new(request?: InterceptorRequest) {
-      const builder = new InterceptorService._InterceptorRequestBuilder();
-      InterceptorUtils.assign(builder, <InterceptorRequest>request);
-      return builder;
-    }
-
-    url(url: string | Request) {
-      super.url(url);
-      return this;
-    }
-
-    options(options: RequestOptionsArgs) {
-      super.options(options);
-      return this;
-    }
-
-    sharedData(sharedData: any) {
-      super.sharedData(sharedData);
-      return this;
-    }
-
-    shortCircuitAtCurrentStep(shortCircuitAtCurrentStep: boolean) {
-      super.shortCircuitAtCurrentStep(shortCircuitAtCurrentStep);
-      return this;
-    }
-
-    alsoForceRequestCompletion(alsoForceRequestCompletion: boolean) {
-      super.alsoForceRequestCompletion(alsoForceRequestCompletion);
-      return this;
-    }
-
-    alreadyShortCircuited(alreadyShortCircuited: boolean) {
-      this._alreadyShortCircuited = alreadyShortCircuited;
-      return this;
-    }
-
-    shortCircuitTriggeredBy(shortCircuitTriggeredBy: number) {
-      this._shortCircuitTriggeredBy = shortCircuitTriggeredBy;
-      return this;
-    }
-
-    err(err: any) {
-      this._err = err;
-      return this;
-    }
-
-    errEncounteredAt(errEncounteredAt: number) {
-      this._errEncounteredAt = errEncounteredAt;
-      return this;
-    }
-
-  }
-
-  /**
-   * Utility builder for creating a new instance of InterceptorResponseWrapper with additional ability to set internal properties aswell
-   * Use _InterceptorResponseWrapperBuilder.new() to instantiate the builder
-   */
-  private static _InterceptorResponseWrapperBuilder = class extends InterceptorResponseWrapperBuilder {
-
-    /**
-     * Use _InterceptorResponseWrapperBuilder.new() to instantiate the builder
-     */
-    protected constructor() {
-      super();
-    }
-
-    static new(from?: Response | InterceptorResponseWrapper | InterceptorRequest) {
-      const builder = new InterceptorService._InterceptorResponseWrapperBuilder();
-      if (from instanceof Response) {
-        builder._response = from;
-      } else if (from instanceof InterceptorResponseWrapper) {
-        InterceptorUtils.assign(builder, <InterceptorResponseWrapper>from);
-      } else {
-        InterceptorUtils.assign(builder, <InterceptorRequest>from);
-      }
-      return builder;
-    }
-
-    url(url: string | Request) {
-      this._url = url;
-      return this;
-    }
-
-    options(options: RequestOptionsArgs | InterceptorRequestOptionsArgs) {
-      this._options = options;
-      return this;
-    }
-
-    response(response: Response) {
-      super.response(response);
-      return this;
-    }
-
-    sharedData(sharedData: any) {
-      super.sharedData(sharedData);
-      return this;
-    }
-
-    shortCircuitTriggeredBy(shortCircuitTriggeredBy: number) {
-      this._shortCircuitTriggeredBy = shortCircuitTriggeredBy;
-      return this;
-    }
-
-    forceReturnResponse(forceReturnResponse: boolean) {
-      super.forceReturnResponse(forceReturnResponse);
-      return this;
-    }
-
-    forceRequestCompletion(forceRequestCompletion: boolean) {
-      super.forceRequestCompletion(forceRequestCompletion);
-      return this;
-    }
-
-    responseGeneratedByShortCircuitHandler(responseGeneratedByShortCircuitHandler: boolean) {
-      this._responseGeneratedByShortCircuitHandler = responseGeneratedByShortCircuitHandler;
-      return this;
-    }
-
-    err(err: any) {
-      super.err(err);
-      return this;
-    }
-
-    errEncounteredAt(errEncounteredAt: number) {
-      this._errEncounteredAt = errEncounteredAt;
-      return this;
-    }
-
-    errEncounteredInRequestCycle(errEncounteredInRequestCycle: boolean) {
-      this._errEncounteredInRequestCycle = errEncounteredInRequestCycle;
-      return this;
-    }
-
+    return (<InterceptorRequestOptionsArgs>options).sharedData !== undefined && (<InterceptorRequestOptionsArgs>options).sharedData !== null;
   }
 
   /**

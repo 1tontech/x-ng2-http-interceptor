@@ -62,7 +62,7 @@ export class InterceptorRequest {
     return this._url;
   }
 
-  get options(): RequestOptionsArgs {
+  get options(): RequestOptionsArgs | undefined {
     return this._options;
   }
 
