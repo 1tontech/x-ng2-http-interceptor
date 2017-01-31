@@ -8,9 +8,10 @@ export default {
     '@angular/core': 'ng.core',
     '@angular/http': 'ng.http',
     'rxjs/Observable': 'Rx',
-    'rxjs/add/operator/mergeMap': 'Rx.Observable.prototype',
     'rxjs/add/observable/empty': 'Rx.Observable',
     'rxjs/add/observable/of': 'Rx.Observable',
-    'rxjs/add/observable/throw': 'Rx.Observable'
+    'rxjs/add/observable/throw': 'Rx.Observable',
+    'rxjs/add/operator/catch': 'Rx.Observable.prototype',
+    'rxjs/add/operator/mergeMap': 'Rx.Observable.prototype'
   }
 }
