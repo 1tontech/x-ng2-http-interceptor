@@ -6,12 +6,12 @@ notifications:
   email: false
 node_js:
   - '6'
-before_install:
+before_script:
   - npm run before-publish
   - cd $TRAVIS_BUILD_DIR/dist
-install:
+script:
   - npm publish
-after_install:
+after_success:
   - npm run after-publish
   - cd $TRAVIS_BUILD_DIR
 branches:
