@@ -9,9 +9,9 @@ node_js:
 before_script:
   - npm run before-publish
   - cd $TRAVIS_BUILD_DIR/dist
-script:
-  - npm publish
 after_success:
+  - npm publish
+after_script:
   - npm run after-publish
   - cd $TRAVIS_BUILD_DIR
 branches:
