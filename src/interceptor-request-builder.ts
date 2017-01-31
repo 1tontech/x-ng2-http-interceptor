@@ -1,6 +1,6 @@
 import { Request, RequestOptionsArgs, Response } from '@angular/http';
 
-import { InterceptorRequest } from "./interceptor-request";
+import { InterceptorRequest } from './interceptor-request';
 import { InterceptorUtils } from './interceptor-utils';
 
 /**
@@ -19,16 +19,16 @@ export class InterceptorRequestBuilder {
   protected _err?: any;
   protected _errEncounteredAt?: number;
 
-  /**
-   * Use InterceptorRequestBuilder.new() to instantiate the builder
-   */
-  protected constructor() { }
-
   static new(request: InterceptorRequest): InterceptorRequestBuilder {
     const builder = new InterceptorRequestBuilder();
     InterceptorUtils.assign(builder, <InterceptorRequest>request);
     return builder;
   }
+
+  /**
+   * Use InterceptorRequestBuilder.new() to instantiate the builder
+   */
+  protected constructor() { }
 
   url(url: string | Request): InterceptorRequestBuilder {
     this._url = url;

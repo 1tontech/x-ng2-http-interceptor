@@ -1,3 +1,4 @@
+import { InterceptorRequestInternal } from './interceptor-request-internal';
 import { Request, RequestOptionsArgs, Response } from '@angular/http';
 
 import { InterceptorRequest } from './interceptor-request';
@@ -9,27 +10,32 @@ import { InterceptorUtils } from './interceptor-utils';
 /**
  * !!INTERNAL USE ONLY!!
  * Utility builder for creating a new instance of InterceptorResponseWrapper with additional ability to set internal properties aswell
- * Use _InterceptorResponseWrapperBuilder.new() to instantiate the builder
+ * Use InterceptorResponseWrapperBuilderInternal.new() to instantiate the builder
  */
-export class _InterceptorResponseWrapperBuilder extends InterceptorResponseWrapperBuilder {
+export class InterceptorResponseWrapperBuilderInternal extends InterceptorResponseWrapperBuilder {
 
-  /**
-   * Use _InterceptorResponseWrapperBuilder.new() to instantiate the builder
-   */
-  protected constructor() {
-    super();
-  }
-
-  static new(from?: Response | InterceptorResponseWrapper | InterceptorRequest) {
-    const builder = new _InterceptorResponseWrapperBuilder();
+  static newInternal(interceptorStep: number, from?: Response | InterceptorResponseWrapper | InterceptorRequestInternal) {
+    const builder = new InterceptorResponseWrapperBuilderInternal();
     if (from instanceof Response) {
       builder._response = from;
     } else if (from instanceof InterceptorResponseWrapper) {
       InterceptorUtils.assign(builder, <InterceptorResponseWrapper>from);
     } else {
-      InterceptorUtils.assign(builder, <InterceptorRequest>from);
+      const request = <InterceptorRequestInternal>from;
+      InterceptorUtils.assign(builder, request);
+      if (request.shortCircuitAtCurrentStep) {
+        builder._shortCircuitTriggeredBy = interceptorStep - 1;
+        builder._forceRequestCompletion = request.alsoForceRequestCompletion;
+      }
     }
     return builder;
+  }
+
+  /**
+   * Use InterceptorResponseWrapperBuilderInternal.new() to instantiate the builder
+   */
+  protected constructor() {
+    super();
   }
 
   url(url: string | Request) {

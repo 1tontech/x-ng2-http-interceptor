@@ -6,10 +6,6 @@ import { InterceptorUtils } from './interceptor-utils';
 
 export class InterceptorResponseWrapper {
 
-  constructor(builder: InterceptorResponseWrapperBuilder) {
-    InterceptorUtils.assign(this, builder);
-  }
-
   /**
    * url which will be cascaded to the final {@code Http} call
    */
@@ -28,12 +24,14 @@ export class InterceptorResponseWrapper {
   /**
    * Data that gets shared between all interceptors; across request & response cycles<br />
    * i.e before interceptor 1, before interceptor 2, actual http call, after interceptor 2, after interceptor 1 <br />
-   * Data should accumulated on the same shared state; so be cautious & always make sure that you do neccessary checks such as ${@code sharedData || {}}
+   * Data should accumulated on the same shared state;\
+   * so be cautious & always make sure that you do neccessary checks such as ${@code sharedData || {}}
    */
   protected _sharedData?: any;
 
   /**
-   * Indicates the steps at which the request was cancelled; This value is zero indexed, meaning, if first interceptor has ask for skipping subsequent steps, this value will be 0
+   * Indicates the steps at which the request was cancelled;
+   * This value is zero indexed, meaning, if first interceptor has ask for skipping subsequent steps, this value will be 0
    */
   protected _shortCircuitTriggeredBy?: number;
 
@@ -61,7 +59,8 @@ export class InterceptorResponseWrapper {
   protected _err?: any;
 
   /**
-   * Index of the interceptor that raise err; This value is zero indexed, meaning, if first interceptor throws an error before http request is sent; this value will be 0
+   * Index of the interceptor that raise err;
+   * This value is zero indexed, meaning, if first interceptor throws an error before http request is sent; this value will be 0
    * If error occurs during the actual http request, the value would be set to `interceptors.length`
    */
   protected _errEncounteredAt?: number;
@@ -70,6 +69,10 @@ export class InterceptorResponseWrapper {
    * Flag indicating whether the error occurred in post response/prior to getting response
    */
   protected _errEncounteredInRequestCycle?: boolean;
+
+  constructor(builder: InterceptorResponseWrapperBuilder) {
+    InterceptorUtils.assign(this, builder);
+  }
 
   get url(): string | Request {
     return this._url;

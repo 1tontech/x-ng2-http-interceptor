@@ -22,11 +22,6 @@ export class InterceptorResponseWrapperBuilder {
   protected _errEncounteredAt?: number;
   protected _errEncounteredInRequestCycle?: boolean;
 
-  /**
-   * Use InterceptorResponseBuilder.new() to instantiate the builder
-   */
-  protected constructor() { }
-
   static new(response: Response | InterceptorResponseWrapper): InterceptorResponseWrapperBuilder {
     const builder = new InterceptorResponseWrapperBuilder();
     if (response instanceof Response) {
@@ -36,6 +31,11 @@ export class InterceptorResponseWrapperBuilder {
     }
     return builder;
   }
+
+  /**
+   * Use InterceptorResponseBuilder.new() to instantiate the builder
+   */
+  protected constructor() { }
 
   response(response: Response): InterceptorResponseWrapperBuilder {
     this._response = response;

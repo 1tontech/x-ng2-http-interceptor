@@ -14,5 +14,8 @@ import { InterceptorService } from './interceptor-service';
  * 2. Allows user to retry the request if the requets is expired due to connection timeout using `Observable.retry`/`Observable.retryWhen`
  */
 export interface RealResponseObservableTransformer {
-  tranform(response$: Observable<Response>, request: InterceptorRequest, http: HttpDirect, interceptorService: InterceptorService): Observable<Response>;
+  tranform(response$: Observable<Response>,
+    request: InterceptorRequest,
+    http: HttpDirect,
+    interceptorService: InterceptorService): Observable<Response>;
 }

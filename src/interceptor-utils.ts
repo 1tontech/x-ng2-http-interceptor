@@ -2,11 +2,6 @@ import { RequestOptionsArgs } from '@angular/http';
 import { InterceptorRequestOptionsArgs } from './interceptor-request-options-args';
 
 export class InterceptorUtils {
-  /**
-   * Forcing the user to use static methods, as this is a utility class
-   */
-  private constructor() {
-  }
 
   static from(options: RequestOptionsArgs): InterceptorRequestOptionsArgs {
     const interceptorRequestOptionsArgs: InterceptorRequestOptionsArgs = {};
@@ -25,6 +20,12 @@ export class InterceptorUtils {
       }
     }
     return target;
+  }
+
+  /**
+   * Forcing the user to use static methods, as this is a utility class
+   */
+  private constructor() {
   }
 
 }

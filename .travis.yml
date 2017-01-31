@@ -8,8 +8,6 @@ node_js:
   - '6'
 after_success:
   - npm run semantic-release
-deploy:
-  skip_cleanup: true
 branches:
   only:
     - /^angular\d+$/
