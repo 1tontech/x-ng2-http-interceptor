@@ -6,14 +6,14 @@ notifications:
   email: false
 node_js:
   - '6'
-after_success:
-  - npm run pre-publish
-before_deploy:
-  - cd dist
-deploy:
+before_install:
+  - npm run before-publish
+  - cd $TRAVIS_BUILD_DIR/dist
+install:
   - npm publish
-after_deploy:
-  - npm run post-publish
+after_install:
+  - npm run after-publish
+  - cd $TRAVIS_BUILD_DIR
 branches:
   only:
     - /^angular\d+$/
