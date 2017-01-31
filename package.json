@@ -17,8 +17,7 @@
     "generateDistPackageJson": "node .scripts/generatePackageJson.js",
     "build": "npm run clean && npm run transpile && npm run package && npm run minify && npm run generateDistPackageJson",
     "commit": "git-cz",
-    "before-publish": "semantic-release pre && npm build",
-    "after-publish": "npm publish && semantic-release post"
+    "semantic-release": "semantic-release pre && npm build && cd $TRAVIS_BUILD_DIR/dist && npm publish && semantic-release post"
   },
   "dependencies": {
     "@angular/core": "^2.0.0",
