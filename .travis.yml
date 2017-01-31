@@ -7,7 +7,13 @@ notifications:
 node_js:
   - '6'
 after_success:
-  - npm run semantic-release
+  - npm run pre-publish
+before_deploy:
+  - cd dist
+deploy:
+  - npm publish
+after_deploy:
+  - npm run post-publish
 branches:
   only:
     - /^angular\d+$/
