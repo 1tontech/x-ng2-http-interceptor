@@ -286,9 +286,14 @@ export class InterceptorService extends Http {
       startFrom = this.interceptors.length - 1;
     }
 
+    // If error occurred when making actual server call, lets start from last interceptor in the chain
+    if (startFrom === this.interceptors.length) {
+      startFrom = this.interceptors.length - 1;
+    }
+
     for (let index = startFrom; index >= 0; index--) {
       const interceptor: Interceptor = this.interceptors[index];
-      if (!interceptor.onResponse) {
+      if (interceptor.onResponse === undefined) {
         continue;
       }
 
