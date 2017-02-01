@@ -74,4 +74,12 @@ export interface Interceptor {
    */
   onErr?(err: any): Observable<InterceptorResponseWrapper> | InterceptorResponseWrapper | void;
 
+  /**
+   * Invoked when any one in the interceptor chain forces request completion/return response/error
+   * Use this method to perform opeations that should be performed irrespective of what the interceptors in the chain want
+   * such as stopping progress bar/logging
+   */
+  onForceCompleteOrForceReturn?(response?: InterceptorResponseWrapper,
+    interceptorStep?: number): void;
+
 }

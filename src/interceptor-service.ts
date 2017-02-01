@@ -178,14 +178,10 @@ export class InterceptorService extends Http {
             .build();
           return Observable.of(responseWrapper);
         } else if (interceptorRequestInternal.getShortCircuitAtCurrentStep()) {
-          if (interceptorRequestInternal.getAlsoForceRequestCompletion()) {
-            return Observable.empty();
-          } else {
-            const responseWrapper = InterceptorResponseWrapperBuilderInternal
-              .newInternal(this.interceptors.length, transformedRequestInternal)
-              .build();
-            return Observable.of(responseWrapper);
-          }
+          const responseWrapper = InterceptorResponseWrapperBuilderInternal
+            .newInternal(this.interceptors.length, transformedRequestInternal)
+            .build();
+          return Observable.of(responseWrapper);
         }
 
         let response$ = super.request(transformedRequest.url, transformedRequest.options);
@@ -240,15 +236,11 @@ export class InterceptorService extends Http {
           if (requestInternalBuilder.getErr() || requestInternalBuilder.getAlreadyShortCircuited()) {
             return Observable.of(request);
           } else if (requestInternalBuilder.getShortCircuitAtCurrentStep()) {
-            if (requestInternalBuilder.getAlsoForceRequestCompletion()) {
-              return Observable.empty();
-            } else {
-              const requestBuilder = InterceptorRequestBuilderInternal.new(request)
-                .shortCircuitAtCurrentStep(false)
-                .shortCircuitTriggeredBy(this.interceptors.length - 1) // since the last interceptor in the chain asked for short circuiting
-                .alreadyShortCircuited(true);
-              return Observable.of(requestBuilder.build());
-            }
+            const requestBuilder = InterceptorRequestBuilderInternal.new(request)
+              .shortCircuitAtCurrentStep(false)
+              .shortCircuitTriggeredBy(this.interceptors.length - 1) // since the last interceptor in the chain asked for short circuiting
+              .alreadyShortCircuited(true);
+            return Observable.of(requestBuilder.build());
           }
 
           const processedRequest = interceptor.beforeRequest(request, index);
@@ -301,8 +293,18 @@ export class InterceptorService extends Http {
         .flatMap<InterceptorResponseWrapper, InterceptorResponseWrapper>(
         (transformedResponseWrapper: InterceptorResponseWrapper, _: any) => {
           if (transformedResponseWrapper.forceRequestCompletion) {
-            return Observable.empty();
+            if (interceptor.onForceCompleteOrForceReturn !== undefined) {
+              interceptor.onForceCompleteOrForceReturn(transformedResponseWrapper, index);
+            }
+            if (index === 0) {
+              return Observable.empty();
+            } else {
+              return Observable.of(transformedResponseWrapper);
+            }
           } else if (transformedResponseWrapper.forceReturnResponse) {
+            if (interceptor.onForceCompleteOrForceReturn !== undefined) {
+              interceptor.onForceCompleteOrForceReturn(transformedResponseWrapper, index);
+            }
             return Observable.of(transformedResponseWrapper);
           }
 
