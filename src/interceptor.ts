@@ -31,14 +31,7 @@ export interface Interceptor {
 
   /**
    * Invoked once for each of the interceptors in the chain; in the reverse order of chain,\
-   *  unless any of the earlier interceptors asked to complete the flow/return response/throw error to subscriber
-   *
-   * Gives the ability to transform the response in each of the following scenarios
-   * 1. For normal response flow; i.e no errors along the chain/no interceptor wanted to short the circuit
-   * 2. One of the interceptor indicated to short the circuit & one of the earlier interceptor in chain\
-   *  returned a InterceptorResponseWrapper when its onShortCircuit(..) method is invoked
-   * 3. One of the interceptor threw error & one of the earlier interceptor in chain\
-   *  returned a `InterceptorResponseWrapper` when its onErr(..) method is invoked
+   *  unless any of the earlier interceptors asked to complete the flow/short the circuit/return response/throw error to subscriber
    *
    * Set any of the following properties of `InterceptorResponseWrapper` to be able to change the way response to sent to subscriber
    * a. `forceReturnResponse` - will send the `Response` to the subscriber directly by skipping all intermediate steps
@@ -54,25 +47,24 @@ export interface Interceptor {
    * Invoked once for each of the interceptors in the chain; in the reverse order of chain,\
    *  if any of the `beforeRequest(..)` responded by setting `shortCircuitAtCurrentStep` property of `InterceptorRequest`
    * Use this method to generate a response that gets sent to the subscriber.
-   * If you return nothing, the `onShortCircuit(..) will be cascaded along the interceptor chain
-   * If you return an Observable<InterceptorResponseWrapper> | InterceptorResponseWrapper,\
-   *  this rest of the flow would be continued on `onResponse(..)` instead of `onErr(..)` on the next interceptor in the chain\
-   *  & the final result would be sent to the subscriber via next(..) callback
-   * If no `onShortCircuit(..)` handlers before this handler returns any response, an error will be thrown back to the subscriber
+   * The result returned by the first interceptor(last in the response flow) would be sent to the subscriber via next(..) callback
+   * If no `onShortCircuit(..)` handlers before this handler returns any response/force request to complete
+   * An error will be thrown back to the subscriber
    */
   onShortCircuit?(response: InterceptorResponseWrapper,
     interceptorStep: number): Observable<InterceptorResponseWrapper> | InterceptorResponseWrapper | void;
 
   /**
    * Invoked when the flow encounters any error along the interceptor chain.
-   * Use this method to generate a response that gets sent to the subscriber.
+   * Use this method to generate a response that gets sent to the subscriber. `response.err` will contain th actual error
    * If you return nothing, the `onErr(..) will be cascaded along the interceptor chain
-   * If you return an Observable<InterceptorResponseWrapper> | InterceptorResponseWrapper,\
-   *  this rest of the flow would be continued on `onResponse(..)` instead of `onErr(..)` on the next interceptor in the chain\
-   *  & the final result would be sent to the subscriber via next(..) callback
-   * If no `onErr(..)` handlers before this handler returns any response, the error will be thrown back to the subscriber
+   * If you return an Observable<InterceptorResponseWrapper> | InterceptorResponseWrapper
+   *  & the final interceptor in the result chain (first interceptor) would be sent to the subscriber via next(..) callback
+   * If no `onErr(..)` handlers before the first interceptor (last in the response cycle)
+   * handler returns any response, the error will be thrown back to the subscriber
    */
-  onErr?(err: any, interceptorStep: number): Observable<InterceptorResponseWrapper> | InterceptorResponseWrapper | void;
+  onErr?(response: InterceptorResponseWrapper,
+    interceptorStep: number): Observable<InterceptorResponseWrapper> | InterceptorResponseWrapper | void;
 
   /**
    * Invoked when any one in the interceptor chain forces request completion/return response/error
