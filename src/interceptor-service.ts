@@ -285,7 +285,8 @@ export class InterceptorService extends Http {
 
     for (let index = startFrom; index >= 0; index--) {
       const interceptor: Interceptor = this.interceptors[index];
-      if (interceptor.onResponse === undefined) {
+
+      if (!interceptor.onResponse && !interceptor.onShortCircuit && !interceptor.onErr && !interceptor.onForceCompleteOrForceReturn) {
         continue;
       }
 
@@ -311,10 +312,14 @@ export class InterceptorService extends Http {
           let processedResponse: void | InterceptorResponseWrapper | Observable<InterceptorResponseWrapper>;
 
           if (transformedResponseWrapper.err) {
-            processedResponse = interceptor.onErr(transformedResponseWrapper, index);
+            if (interceptor.onErr !== undefined) {
+              processedResponse = interceptor.onErr(transformedResponseWrapper, index);
+            }
           } else if (transformedResponseWrapper.isShortCircuited()) {
-            processedResponse = interceptor.onShortCircuit(transformedResponseWrapper, index);
-          } else {
+            if (interceptor.onShortCircuit !== undefined) {
+              processedResponse = interceptor.onShortCircuit(transformedResponseWrapper, index);
+            }
+          } else if (interceptor.onResponse !== undefined) {
             processedResponse = interceptor.onResponse(transformedResponseWrapper, index);
           }
 
