@@ -21,8 +21,9 @@ export class InterceptorResponseWrapperBuilderInternal extends InterceptorRespon
     } else if (from instanceof InterceptorResponseWrapper) {
       InterceptorUtils.assign(builder, <InterceptorResponseWrapper>from);
     } else {
-      const request: InterceptorRequestInternal = <InterceptorRequestInternal>from;
-      InterceptorUtils.assign(builder, request);
+      const request: InterceptorRequestInternal = new InterceptorRequestInternal();
+      InterceptorUtils.assign(request, from);
+      InterceptorUtils.assign(builder, from);
       if (request.getShortCircuitAtCurrentStep()) {
         builder.shortCircuitTriggeredBy(interceptorStep - 1)
           .forceRequestCompletion(request.getAlsoForceRequestCompletion());
