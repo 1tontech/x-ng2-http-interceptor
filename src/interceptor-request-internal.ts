@@ -6,27 +6,27 @@ import { InterceptorUtils } from './interceptor-utils';
 
 export class InterceptorRequestInternal extends InterceptorRequest {
 
-  get shortCircuitAtCurrentStep(): boolean {
+  getShortCircuitAtCurrentStep(): boolean {
     return this._shortCircuitAtCurrentStep;
   }
 
-  get alsoForceRequestCompletion(): boolean {
+  getAlsoForceRequestCompletion(): boolean {
     return this._alsoForceRequestCompletion;
   }
 
-  get alreadyShortCircuited(): boolean {
+  getAlreadyShortCircuited(): boolean {
     return this._alreadyShortCircuited;
   }
 
-  get shortCircuitTriggeredBy(): number {
+  getShortCircuitTriggeredBy(): number {
     return this._shortCircuitTriggeredBy;
   }
 
-  get err(): any {
+  getErr(): any {
     return this._err;
   }
 
-  get errEncounteredAt(): number {
+  getErrEncounteredAt(): number {
     return this._errEncounteredAt;
   }
 

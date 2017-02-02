@@ -170,14 +170,14 @@ export class InterceptorService extends Http {
     return this.runBeforeInterceptors(request)
       .flatMap<InterceptorRequest, InterceptorResponseWrapper>((transformedRequest: InterceptorRequest, _: number) => {
         const transformedRequestInternal = <InterceptorRequestInternal>transformedRequest;
-        const interceptorRequestInternal = InterceptorRequestBuilderInternal.new(transformedRequestInternal);
+        const interceptorRequestInternalBuilder = InterceptorRequestBuilderInternal.new(transformedRequestInternal);
 
-        if (interceptorRequestInternal.getErr() || interceptorRequestInternal.getAlreadyShortCircuited()) {
+        if (interceptorRequestInternalBuilder.getErr() || interceptorRequestInternalBuilder.getAlreadyShortCircuited()) {
           const responseWrapper = InterceptorResponseWrapperBuilderInternal
             .newInternal(this.interceptors.length, transformedRequestInternal)
             .build();
           return Observable.of(responseWrapper);
-        } else if (interceptorRequestInternal.getShortCircuitAtCurrentStep()) {
+        } else if (interceptorRequestInternalBuilder.getShortCircuitAtCurrentStep()) {
           const responseWrapper = InterceptorResponseWrapperBuilderInternal
             .newInternal(this.interceptors.length, transformedRequestInternal)
             .build();
