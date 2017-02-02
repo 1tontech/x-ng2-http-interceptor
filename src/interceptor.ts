@@ -27,7 +27,7 @@ export interface Interceptor {
    *
    * Gives the ability to transform the request
    */
-  beforeRequest?(request: InterceptorRequest, interceptorStep?: number): Observable<InterceptorRequest> | InterceptorRequest | void;
+  beforeRequest?(request: InterceptorRequest, interceptorStep: number): Observable<InterceptorRequest> | InterceptorRequest | void;
 
   /**
    * Invoked once for each of the interceptors in the chain; in the reverse order of chain,\
@@ -48,7 +48,7 @@ export interface Interceptor {
    *  by looking at the `responseGeneratedByShortCircuitHandler` & `responseGeneratedByErrHandler` flags
    */
   onResponse?(response: InterceptorResponseWrapper,
-    interceptorStep?: number): Observable<InterceptorResponseWrapper> | InterceptorResponseWrapper | void;
+    interceptorStep: number): Observable<InterceptorResponseWrapper> | InterceptorResponseWrapper | void;
 
   /**
    * Invoked once for each of the interceptors in the chain; in the reverse order of chain,\
@@ -61,7 +61,7 @@ export interface Interceptor {
    * If no `onShortCircuit(..)` handlers before this handler returns any response, an error will be thrown back to the subscriber
    */
   onShortCircuit?(response: InterceptorResponseWrapper,
-    interceptorStep?: number): Observable<InterceptorResponseWrapper> | InterceptorResponseWrapper | void;
+    interceptorStep: number): Observable<InterceptorResponseWrapper> | InterceptorResponseWrapper | void;
 
   /**
    * Invoked when the flow encounters any error along the interceptor chain.
@@ -72,14 +72,14 @@ export interface Interceptor {
    *  & the final result would be sent to the subscriber via next(..) callback
    * If no `onErr(..)` handlers before this handler returns any response, the error will be thrown back to the subscriber
    */
-  onErr?(err: any): Observable<InterceptorResponseWrapper> | InterceptorResponseWrapper | void;
+  onErr?(err: any, interceptorStep: number): Observable<InterceptorResponseWrapper> | InterceptorResponseWrapper | void;
 
   /**
    * Invoked when any one in the interceptor chain forces request completion/return response/error
    * Use this method to perform opeations that should be performed irrespective of what the interceptors in the chain want
    * such as stopping progress bar/logging
    */
-  onForceCompleteOrForceReturn?(response?: InterceptorResponseWrapper,
-    interceptorStep?: number): void;
+  onForceCompleteOrForceReturn?(response: InterceptorResponseWrapper,
+    interceptorStep: number): void;
 
 }
