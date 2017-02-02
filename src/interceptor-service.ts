@@ -225,9 +225,6 @@ export class InterceptorService extends Http {
 
     for (let index = 0; index < this.interceptors.length; index++) {
       const interceptor: Interceptor = this.interceptors[index];
-      if (!interceptor.beforeRequest) {
-        continue;
-      }
 
       request$ = request$
         .flatMap<InterceptorRequest, InterceptorRequest>((request: InterceptorRequest, _: number) => {
@@ -285,10 +282,6 @@ export class InterceptorService extends Http {
 
     for (let index = startFrom; index >= 0; index--) {
       const interceptor: Interceptor = this.interceptors[index];
-
-      if (!interceptor.onResponse && !interceptor.onShortCircuit && !interceptor.onErr && !interceptor.onForceCompleteOrForceReturn) {
-        continue;
-      }
 
       responseWrapper$ = responseWrapper$
         .flatMap<InterceptorResponseWrapper, InterceptorResponseWrapper>(
