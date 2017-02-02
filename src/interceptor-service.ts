@@ -230,7 +230,7 @@ export class InterceptorService extends Http {
       }
 
       request$ = request$
-        .flatMap<InterceptorRequest, InterceptorRequest>((request: InterceptorRequest, currentInterceptorIndex: number) => {
+        .flatMap<InterceptorRequest, InterceptorRequest>((request: InterceptorRequest, _: number) => {
           const requestInternalBuilder = InterceptorRequestBuilderInternal.new(request);
 
           if (requestInternalBuilder.getErr() || requestInternalBuilder.getAlreadyShortCircuited()) {
@@ -238,12 +238,12 @@ export class InterceptorService extends Http {
           } else if (requestInternalBuilder.getShortCircuitAtCurrentStep()) {
             const requestBuilder = InterceptorRequestBuilderInternal.new(request)
               .shortCircuitAtCurrentStep(false)
-              .shortCircuitTriggeredBy(currentInterceptorIndex - 1) // since the last interceptor requested for short circuit
+              .shortCircuitTriggeredBy(index - 1) // since the last interceptor requested for short circuit
               .alreadyShortCircuited(true);
             return Observable.of(requestBuilder.build());
           }
 
-          const processedRequest = interceptor.beforeRequest(request, currentInterceptorIndex);
+          const processedRequest = interceptor.beforeRequest(request, index);
           let processedRequest$: Observable<InterceptorRequest>;
 
           if (!processedRequest) { // if no request is returned; just proceed with the original request
@@ -257,7 +257,7 @@ export class InterceptorService extends Http {
             .catch((err: any, caught: Observable<InterceptorRequest>) => {
               const responseBuilder = InterceptorRequestBuilderInternal.new(request)
                 .err(err)
-                .errEncounteredAt(currentInterceptorIndex);
+                .errEncounteredAt(index);
               return Observable.of(responseBuilder.build());
             });
         });
