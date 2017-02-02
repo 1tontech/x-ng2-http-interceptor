@@ -240,23 +240,26 @@ export class InterceptorService extends Http {
             return Observable.of(requestBuilder.build());
           }
 
-          const processedRequest = interceptor.beforeRequest(request, index);
-          let processedRequest$: Observable<InterceptorRequest>;
+          if (interceptor.beforeRequest !== undefined) {
+            const processedRequest = interceptor.beforeRequest(request, index);
+            let processedRequest$: Observable<InterceptorRequest>;
 
-          if (!processedRequest) { // if no request is returned; just proceed with the original request
-            processedRequest$ = Observable.of(request);
-          } else if (processedRequest instanceof Observable) {
-            processedRequest$ = <Observable<InterceptorRequest>>processedRequest;
-          } else {
-            processedRequest$ = Observable.of(<InterceptorRequest>processedRequest);
+            if (!processedRequest) { // if no request is returned; just proceed with the original request
+              processedRequest$ = Observable.of(request);
+            } else if (processedRequest instanceof Observable) {
+              processedRequest$ = <Observable<InterceptorRequest>>processedRequest;
+            } else {
+              processedRequest$ = Observable.of(<InterceptorRequest>processedRequest);
+            }
+            return processedRequest$
+              .catch((err: any, caught: Observable<InterceptorRequest>) => {
+                const responseBuilder = InterceptorRequestBuilderInternal.new(request)
+                  .err(err)
+                  .errEncounteredAt(index);
+                return Observable.of(responseBuilder.build());
+              });
           }
-          return processedRequest$
-            .catch((err: any, caught: Observable<InterceptorRequest>) => {
-              const responseBuilder = InterceptorRequestBuilderInternal.new(request)
-                .err(err)
-                .errEncounteredAt(index);
-              return Observable.of(responseBuilder.build());
-            });
+          return Observable.of(request);
         });
     }
 
