@@ -21,7 +21,7 @@ export class InterceptorResponseWrapperBuilderInternal extends InterceptorRespon
     } else if (from instanceof InterceptorResponseWrapper) {
       InterceptorUtils.assign(builder, <InterceptorResponseWrapper>from);
     } else {
-      const request = <InterceptorRequestInternal>from;
+      const request: InterceptorRequestInternal = <InterceptorRequestInternal>from;
       InterceptorUtils.assign(builder, request);
       if (request.shortCircuitAtCurrentStep) {
         builder._shortCircuitTriggeredBy = interceptorStep - 1;
