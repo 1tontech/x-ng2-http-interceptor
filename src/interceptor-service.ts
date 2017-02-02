@@ -308,7 +308,7 @@ export class InterceptorService extends Http {
             return Observable.of(transformedResponseWrapper);
           }
 
-          let processedResponse;
+          let processedResponse: void | InterceptorResponseWrapper | Observable<InterceptorResponseWrapper>;
 
           if (transformedResponseWrapper.err) {
             processedResponse = interceptor.onErr(transformedResponseWrapper, index);
