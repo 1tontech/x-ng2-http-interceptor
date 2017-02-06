@@ -186,7 +186,7 @@ export class InterceptorService extends Http {
 
         let response$ = super.request(transformedRequest.url, transformedRequest.options);
         if (this._realResponseObservableTransformer) {
-          response$ = this._realResponseObservableTransformer.tranform(response$, transformedRequest, new this.HttpDirect(), this);
+          response$ = this._realResponseObservableTransformer.transform(response$, transformedRequest, new this.HttpDirect(), this);
         }
 
         return response$.map((response: Response) => {
