@@ -56,12 +56,12 @@
     "name": "Ashok Koyi",
     "url": "http://thekalinga.in"
   },
-  "homepage": "https://github.com/1tontech/ngx-http-interceptor/tree/angular2",
+  "homepage": "https://github.com/1tontech/x-ng2-http-interceptor",
   "bugs": {
-    "url": "https://github.com/1tontech/ngx-http-interceptor/issues"
+    "url": "https://github.com/1tontech/x-ng2-http-interceptor/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/1tontech/ngx-http-interceptor.git"
+    "url": "https://github.com/1tontech/x-ng2-http-interceptor.git"
   }
 }

@@ -1,6 +1,6 @@
 # x-ng2-http-interceptor
 
-[![Travis branch](https://img.shields.io/travis/1tontech/ngx-http-interceptor/angular2.svg?style=flat-square)](https://img.shields.io/travis/1tontech/ngx-http-interceptor/angular2.svg)
+[![Travis branch](https://img.shields.io/travis/1tontech/x-ng2-http-interceptor/master.svg?style=flat-square)](https://img.shields.io/travis/1tontech/x-ng2-http-interceptor/master.svg)
 [![version](https://img.shields.io/npm/v/x-ng2-http-interceptor.svg?style=flat-square)](http://npm.im/x-ng2-http-interceptor)
 [![downloads](https://img.shields.io/npm/dm/x-ng2-http-interceptor.svg?style=flat-square)](http://npm-stat.com/charts.html?package=x-ng2-http-interceptor)
 [![MIT License](https://img.shields.io/npm/l/x-ng2-http-interceptor.svg?style=flat-square)](http://opensource.org/licenses/MIT)
