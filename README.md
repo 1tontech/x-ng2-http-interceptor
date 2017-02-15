@@ -6,7 +6,7 @@
 [![MIT License](https://img.shields.io/npm/l/x-ng2-http-interceptor.svg?style=flat-square)](http://opensource.org/licenses/MIT)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square)](https://github.com/semantic-release/semantic-release)
 
-This package adds the intercepting capabilities to `http` module of Latest version of Angular, by extending the @angular/http class. For concept behind Interceptor, take a look at the [wiki](https://github.com/1tontech/x-ng2-http-interceptor/wiki/Concept)
+This package adds the intercepting capabilities to `http` module of Latest version of Angular, by extending the @angular/http class. Demo for this project can be found [here](https://github.com/1tontech/x-ng2-http-interceptor-demo)
 
 # Installation
 
